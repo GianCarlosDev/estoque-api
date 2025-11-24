@@ -1,8 +1,8 @@
-📦 Estoque API
+📦Estoque API
 
-API REST desenvolvida em Java + Spring Boot para controle de estoque, permitindo o gerenciamento de produtos, funcionários e movimentações de entrada/saída, além de gerar automaticamente alertas para produtos com estoque baixo.
+API REST para controle de estoque desenvolvida em Java 17 com Spring Boot, permitindo gerenciar produtos, funcionários e movimentações de entrada/saída, além de identificar automaticamente produtos com estoque baixo.
 
-🚀 Tecnologias Utilizadas
+Tecnologias
 	•	Java 17
 	•	Spring Boot
 	•	Spring Web
@@ -10,51 +10,37 @@ API REST desenvolvida em Java + Spring Boot para controle de estoque, permitindo
 	•	MySQL
 	•	Lombok
 
-📁 Funcionalidades
+Funcionalidades
+	•	Produtos
+	•	Criar novos produtos
+	•	Listar produtos
+	•	Definir um estoque mínimo para cada produto
+	•	Gerar alerta quando o estoque está abaixo do mínimo
+	•	Endpoint para listar produtos críticos (com alerta)
+	•	Funcionários
+	•	Cadastrar funcionário
+	•	Listar funcionários
+	•	Cada funcionário tem um cargo (REPOSITOR ou VENDEDOR)
+	•	Permissões por cargo:
+	•	REPOSITOR → pode fazer entrada
+	•	VENDEDOR → pode fazer saída
+	•	Movimentações de Estoque
+	•	Registrar movimentação do tipo ENTRADA ou SAÍDA
+	•	Validar se o funcionário tem permissão para o tipo de movimentação
+	•	Ao registrar movimentação, o sistema ajusta o estoque do produto
+	•	Recalcula alerta de estoque baixo para o produto
 
-🔹 Produtos
-	•	Cadastro de novos produtos
-	•	Listagem de produtos
-	•	Definição de estoque mínimo
-	•	Geração automática de alerta quando o estoque está abaixo do mínimo
-	•	Endpoint dedicado para produtos críticos
+API – Endpoints
 
-Endpoints
-
-Método	Endpoint	Descrição
-POST	/produto	Cadastrar novo produto
+Método	Rota	Descrição
+POST	/produto	Cadastrar um novo produto
 GET	/produto	Listar todos os produtos
-GET	/produto/alerta	Listar produtos com estoque abaixo do mínimo
-
-🔹 Funcionários
-	•	Cadastro de funcionários
-	•	Listagem de funcionários
-	•	Funcionários possuem cargos, e cada cargo define o tipo de movimentação permitida
-
-Regras de Permissão
-
-Cargo	Permissão
-REPOSITOR	Movimentações de entrada
-VENDEDOR	Movimentações de saída
-
-Endpoints
-
-Método	Endpoint	Descrição
+GET	/produto/alerta	Listar produtos com estoque baixo
 POST	/funcionario	Cadastrar funcionário
 GET	/funcionario	Listar funcionários
-
-🔹 Movimentações
-	•	Registro de movimentações de ENTRADA ou SAÍDA
-	•	Validação automática baseada no cargo do funcionário
-	•	Atualização automática do estoque do produto
-	•	Atualização do status de alerta do produto
-
-Endpoint
-
-Método	Endpoint	Descrição
 POST	/movimentacao	Registrar movimentação de estoque
 
-Exemplo de JSON
+Exemplo JSON para movimentação:
 
 {
   "codigoP": "PRO123",
@@ -63,13 +49,13 @@ Exemplo de JSON
   "tipo": "ENTRADA"
 }
 
-🛠️ Regras de Negócio
-	•	Estoque nunca pode ficar negativo
-	•	O alerta é recalculado a cada movimentação
-	•	Funcionário só pode registrar movimentações permitidas pelo seu cargo
-	•	Produtos críticos são automaticamente listados em /produto/alerta
+Regras de Negócio
+	•	O estoque de um produto não pode ficar negativo.
+	•	Quando ocorre uma movimentação, o sistema recalcula se deve ativar ou desativar alerta de estoque baixo.
+	•	A permissão para movimentação depende do cargo do funcionário: repositor só entra; vendedor só sai.
+	•	Os produtos com estoque em alerta são disponibilizados via endpoint /produto/alerta.
 
-📊 Estrutura do Projeto
+Estrutura do Projeto
 
 src/
  └── main/
@@ -82,4 +68,14 @@ src/
      └── resources/
          └── application.properties
 
+Como Rodar Localmente
+	1.	Configure um banco MySQL (ou ajuste para outro DB no application.properties).
+	2.	Crie o schema / banco no MySQL para a aplicação.
+	3.	No projeto, ajuste as credenciais de conexão com banco em src/main/resources/application.properties.
+	4.	Compile e rode a aplicação com Maven ou sua IDE:
 
+mvn clean install  
+mvn spring-boot:run  
+
+
+	5.	A API ficará disponível (por exemplo) em http://localhost:8080
