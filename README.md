@@ -75,6 +75,6 @@ src/
 
 ---
 
-## ✨ Autor
+## Alunos
 **Gian Carlos, Luís Gustavo, Pedro Henrique
 Gustavo Barros, Carlos Geovane e Adrysson**
