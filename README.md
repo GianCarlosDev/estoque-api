@@ -97,7 +97,7 @@ src/
 
 3. Execute os comandos:
 
-mvn clean install
-mvn spring-boot:run
+mvn clean install.
+mvn spring-boot:run.
 
 4. Acesse a API em: http://localhost:8080.
