@@ -1,58 +1,64 @@
 📦 Estoque API
 
-API REST para controle de estoque desenvolvida em Java 17 com Spring Boot, permitindo gerenciar produtos, funcionários e movimentações de entrada/saída, além de identificar automaticamente produtos com estoque baixo.
+API REST desenvolvida em Java 17 com Spring Boot para gerenciar produtos, funcionários e movimentações de estoque, incluindo alertas automáticos para estoque baixo.
 
 🚀 Tecnologias Utilizadas
-	•	Java 17
-	•	Spring Boot
-	•	Spring Web
-	•	Spring Data JPA
-	•	MySQL
-	•	Lombok
+
+• Java 17
+
+• Spring Boot
+
+• Spring Web
+
+• Spring Data JPA
+
+• MySQL
+
+• Lombok
 
 📁 Funcionalidades
 
 🔹 Produtos
-	•	Cadastro de produtos
-	•	Listagem geral
-	•	Definição de estoque mínimo
-	•	Alerta automático de estoque baixo
-	•	Endpoint para listar produtos críticos
 
-Endpoints de Produto
+• Cadastro e listagem de produtos.
 
-Método	Endpoint	Descrição
-POST	/produto	Cadastrar produto
-GET	/produto	Listar produtos
-GET	/produto/alerta	Listar produtos com estoque baixo
+• Definição de estoque mínimo e alerta para estoque baixo.
+
+• Endpoints disponíveis:
+
+• POST /produto: Cadastra produto.
+
+• GET /produto: Lista produtos.
+
+• GET /produto/alerta: Lista produtos críticos.
 
 🔹 Funcionários
-	•	Cadastro de funcionários
-	•	Listagem de funcionários
-	•	Cada funcionário possui um cargo
-	•	Cargos e permissões:
-	•	REPOSITOR → permite ENTRADA
-	•	VENDEDOR → permite SAÍDA
 
-Endpoints de Funcionário
+• Cadastro e listagem de funcionários com cargos específicos.
 
-Método	Endpoint	Descrição
-POST	/funcionario	Cadastrar funcionário
-GET	/funcionario	Listar funcionários
+• Permissões por cargo:
+
+• REPOSITOR: Permite ENTRADA.
+
+• VENDEDOR: Permite SAÍDA.
+
+• Endpoints disponíveis:
+
+• POST /funcionario: Cadastra funcionário.
+
+• GET /funcionario: Lista funcionários.
 
 🔹 Movimentações de Estoque
-	•	Registro de movimentações de ENTRADA ou SAÍDA
-	•	Validação automática de permissão pelo cargo
-	•	Atualiza o estoque
-	•	Atualiza o status de alerta do produto
 
-Endpoint de Movimentação
+• Registro de movimentações (ENTRADA e SAÍDA), com validações automáticas de permissões.
 
-Método	Endpoint	Descrição
-POST	/movimentacao	Registrar movimentação
+• Atualização de estoque e status de alerta.
 
-Exemplo de JSON
+• Endpoint disponível:
 
+• POST /movimentacao: Registra movimentação.
+
+• Exemplo de JSON:
 {
   "codigoP": "PRO123",
   "codigoF": "FUNC001",
@@ -61,13 +67,16 @@ Exemplo de JSON
 }
 
 🛠️ Regras de Negócio
-	•	Estoque não pode ficar negativo
-	•	Alerta de estoque é recalculado após cada movimentação
-	•	REPOSITOR só registra entrada
-	•	VENDEDOR só registra saída
-	•	Produtos com estoque baixo aparecem em /produto/alerta
 
-📊 Estrutura do Projeto
+• Estoque não pode ser negativo.
+
+• Alertas de estoque recalculados após cada movimentação.
+
+• Restrições específicas por cargo.
+
+• Produtos críticos listados em /produto/alerta.
+
+📊 Estrutura do Projeto:
 
 src/
  └── main/
@@ -81,14 +90,14 @@ src/
          └── application.properties
 
 ▶️ Como Executar
-	1.	Crie o banco no MySQL
-	2.	Configure o application.properties
-	3.	Execute:
+
+1. Crie o banco no MySQL.
+
+2. Configure o arquivo application.properties.
+
+3. Execute os comandos:
 
 mvn clean install
 mvn spring-boot:run
 
-A API subirá em:
-
-http://localhost:8080
-
+4. Acesse a API em: http://localhost:8080.
