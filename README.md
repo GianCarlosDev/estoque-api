@@ -1,70 +1,80 @@
-📦 Estoque API
+# 📦 Estoque API  
+API REST desenvolvida em **Spring Boot** para gerenciamento de estoque — produtos, funcionários e movimentações, com alerta automático quando o estoque fica baixo.
 
-API desenvolvida em Java 17 + Spring Boot para gerenciamento de produtos, funcionários e movimentações de estoque (entrada e saída), incluindo alerta automático para produtos com estoque abaixo do mínimo.
+---
 
-🚀 Tecnologias Utilizadas
-	•	Java 17
-	•	Spring Boot
-	•	Spring Web
-	•	Spring Data JPA
-	•	MySQL
-	•	Lombok
+## 🚀 Tecnologias
+- **Java 17**  
+- **Spring Boot** (Web, Data JPA)  
+- **MySQL**  
+- **Lombok**  
 
-📁 Estrutura do Projeto
+---
 
+## 🧩 O que essa API faz?
+- Cadastro e consulta de **produtos**
+- Registro de **movimentações** (entrada e saída)
+- Controle de **funcionários** com regras por cargo:  
+  - Repositor → pode fazer **entrada**  
+  - Vendedor → pode fazer **saída**  
+- Alerta automático quando o estoque fica abaixo do mínimo
+- Endpoint dedicado para listar produtos críticos
+
+---
+
+## 🛠️ Como rodar o projeto
+    git clone https://github.com/GianCarlosDev/estoque-api.git
+    cd estoque-api
+    ./mvnw spring-boot:run
+
+Certifique-se de configurar o MySQL no `application.properties`.
+
+---
+
+## 📂 Estrutura do projeto
 src/
- └── main/
-     ├── java/
-     │   └── br.com.estoque/
-     │       ├── controller/
-     │       ├── service/
-     │       ├── repository/
-     │       └── model/
-     └── resources/
-         └── application.properties
+├─ main/
+│ ├─ java/
+│ │ └─ com/giancarlosdev/estoque/
+│ │ ├─ controller/ → Endpoints da API
+│ │ ├─ service/ → Regras de negócio
+│ │ ├─ repository/ → Repositórios JPA
+│ │ ├─ model/ → Entidades (Produto, Funcionário, Movimentação)
+│ │ ├─ dto/ → Objetos de transferência
+│ │ └─ EstoqueApi.java → Classe principal
+│ └─ resources/
+│ ├─ application.properties → Configurações
+│ └─ data.sql (opcional) → Seeds
+└─ test/ → Testes futuros
 
-📌 Endpoints Principais
+---
 
-🧩 Produto
+## 🧪 Exemplos de endpoints
 
-Método	Rota	Descrição
-POST	/produto	Cadastrar produto
-GET	/produto	Listar produtos
-GET	/produto/alerta	Listar produtos com estoque baixo
+### Criar movimentação
+    POST /movimentacao
+    {
+      "codigoP": "PRO123",
+      "codigoF": "FUNC001",
+      "quantidade": 15,
+      "tipo": "ENTRADA"
+    }
 
-👥 Funcionário
+### Listar produtos com alerta
+    GET /produto/alerta
 
-Método	Rota	Descrição
-POST	/funcionario	Cadastrar funcionário
-GET	/funcionario	Listar funcionários
+---
 
-Cargos permitidos:
-	•	REPOSITOR → registra ENTRADA
-	•	VENDEDOR → registra SAÍDA
+## 📌 Roadmap (melhorias futuras)
+- 🔐 Autenticação e autorização (JWT)  
+- 🧪 Testes automatizados  
+- 📄 Swagger/OpenAPI  
+- 🐳 Dockerizar projeto  
+- 📊 Paginação e filtros nas listagens  
+- 📬 Notificações automáticas  
 
-🔄 Movimentação
+---
 
-Método	Rota	Descrição
-POST	/movimentacao	Registrar entrada ou saída
-
-Exemplo de requisição:
-
-{
-  "codigoP": "PRO123",
-  "codigoF": "FUNC001",
-  "quantidade": 10,
-  "tipo": "SAIDA"
-}
-
-⚙️ Regras de Negócio
-
-🔸 Estoque
-	•	Não pode ser negativo
-	•	ENTRADA → adiciona ao estoque
-	•	SAÍDA → subtrai do estoque
-	•	Alerta é ativado quando estoque < estoqueMinimo
-
-🔸 Permissões
-	•	VENDEDOR → somente SAÍDA
-	•	REPOSITOR → somente ENTRADA
-
+## ✨ Autor
+**Gian Carlos**  
+Desenvolvedor Backend • Java & Spring
