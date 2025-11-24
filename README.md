@@ -1,82 +1,143 @@
-📦 Estoque API
+📘 Documentação Técnica – Estoque API
 
-API REST desenvolvida em Java 17 com Spring Boot para gerenciar produtos, funcionários e movimentações de estoque, incluindo alertas automáticos para estoque baixo.
+1. Visão Geral do Projeto
 
-🚀 Tecnologias Utilizadas
+A Estoque API é uma aplicação REST desenvolvida em Java 17 utilizando Spring Boot, criada para gerenciar produtos, funcionários e movimentações de estoque (entrada e saída).
 
-• Java 17
+A API também possui lógica automática para alerta de estoque baixo, ativado quando a quantidade fica abaixo do mínimo definido.
 
-• Spring Boot
+O projeto segue Arquitetura em Camadas:
 
-• Spring Web
+Controller → Service → Repository
 
-• Spring Data JPA
+2. Tecnologias e Dependências
+	•	Java 17
+	•	Spring Boot
+	•	Spring Web
+	•	Spring Data JPA
+	•	MySQL
+	•	Lombok
 
-• MySQL
+3. Modelos (Entities)
 
-• Lombok
+3.1. Produto
 
-📁 Funcionalidades
+Representa um item no estoque.
 
-🔹 Produtos
+Atributos principais:
+	•	id
+	•	nome
+	•	codigo
+	•	estoque
+	•	estoqueMinimo
+	•	alerta (boolean)
+	•	dataCadastro
 
-• Cadastro e listagem de produtos.
+Regras:
+	•	alerta = true quando estoque < estoqueMinimo
+	•	Estoque nunca pode ser negativo
 
-• Definição de estoque mínimo e alerta para estoque baixo.
+3.2. Funcionario
 
-• Endpoints disponíveis:
+Representa um trabalhador do estabelecimento.
 
-• POST /produto: Cadastra produto.
+Atributos principais:
+	•	id
+	•	nome
+	•	codigo
+	•	cargo
 
-• GET /produto: Lista produtos.
+Cargos existentes:
+	•	REPOSITOR → pode realizar ENTRADA
+	•	VENDEDOR → pode realizar SAÍDA
 
-• GET /produto/alerta: Lista produtos críticos.
+3.3. Movimentacao
 
-🔹 Funcionários
+Representa uma operação de entrada ou saída.
 
-• Cadastro e listagem de funcionários com cargos específicos.
+Atributos principais:
+	•	id
+	•	tipo (ENTRADA ou SAÍDA)
+	•	quantidade
+	•	dataHora
+	•	produto
+	•	funcionario
 
-• Permissões por cargo:
+Regras:
+	•	VENDEDOR só registra SAÍDA
+	•	REPOSITOR só registra ENTRADA
+	•	Atualiza automaticamente o estoque do produto
+	•	Após atualizar o estoque, recalcula o campo alerta
 
-• REPOSITOR: Permite ENTRADA.
+4. Camada Controller
 
-• VENDEDOR: Permite SAÍDA.
+4.1. ProdutoController
 
-• Endpoints disponíveis:
+Método	Rota	Descrição
+POST	/produto	Cadastrar produto
+GET	/produto	Listar produtos
+GET	/produto/alerta	Listar produtos com estoque abaixo do mínimo
 
-• POST /funcionario: Cadastra funcionário.
+4.2. FuncionarioController
 
-• GET /funcionario: Lista funcionários.
+Método	Rota	Descrição
+POST	/funcionario	Cadastrar funcionário
+GET	/funcionario	Listar funcionários
 
-🔹 Movimentações de Estoque
+4.3. MovimentacaoController
 
-• Registro de movimentações (ENTRADA e SAÍDA), com validações automáticas de permissões.
+Método	Rota	Descrição
+POST	/movimentacao	Registrar entrada ou saída
 
-• Atualização de estoque e status de alerta.
+Exemplo JSON:
 
-• Endpoint disponível:
-
-• POST /movimentacao: Registra movimentação.
-
-• Exemplo de JSON:
 {
   "codigoP": "PRO123",
   "codigoF": "FUNC001",
-  "quantidade": 15,
-  "tipo": "ENTRADA"
+  "quantidade": 10,
+  "tipo": "SAIDA"
 }
 
-🛠️ Regras de Negócio
+5. Regras de Negócio
 
-• Estoque não pode ser negativo.
+✔ Estoque
+	•	Nunca pode ser negativo
+	•	Movimentações:
+	•	ENTRADA → soma ao estoque
+	•	SAÍDA → subtrai do estoque
+	•	Após atualizar o estoque:
+	•	alerta = estoque < estoqueMinimo
 
-• Alertas de estoque recalculados após cada movimentação.
+✔ Permissões por Cargo
 
-• Restrições específicas por cargo.
+Cargo	Permissão
+REPOSITOR	ENTRADA
+VENDEDOR	SAÍDA
 
-• Produtos críticos listados em /produto/alerta.
+Tentativas inválidas geram exceção.
 
-📊 Estrutura do Projeto:
+✔ Movimentações
+	•	Funcionário deve existir
+	•	Produto deve existir
+	•	Quantidade deve ser maior que zero
+	•	Atualiza automaticamente:
+	•	Estoque
+	•	Alerta
+	•	Data/hora
+
+6. Fluxo de Funcionamento
+	1.	Cadastrar funcionários
+Informando o cargo (REPOSITOR ou VENDEDOR).
+	2.	Cadastrar produtos
+Informando estoque mínimo.
+	3.	Registrar movimentações
+	•	Valida cargo x tipo
+	•	Atualiza estoque
+	•	Recalcula alerta
+	4.	Consultar produtos críticos
+	•	/produto/alerta mostra itens com estoque baixo
+
+7. Estrutura de Pastas
 
 src/
  └── main/
@@ -88,16 +149,3 @@ src/
      │       └── model/
      └── resources/
          └── application.properties
-
-▶️ Como Executar
-
-1. Crie o banco no MySQL.
-
-2. Configure o arquivo application.properties.
-
-3. Execute os comandos:
-
-mvn clean install.
-mvn spring-boot:run.
-
-4. Acesse a API em: http://localhost:8080.
