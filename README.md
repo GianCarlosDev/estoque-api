@@ -76,5 +76,5 @@ src/
 ---
 
 ## ✨ Autor
-**Gian Carlos**  
-Desenvolvedor Backend • Java & Spring
+**Gian Carlos, Luís Gustavo, Pedro Henrique
+Gustavo Barros, Carlos Geovane e Adrysson**
